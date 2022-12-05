@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="node_modules/axios/dist/axios.min.js"></script>
+
+     
+    <style>
+        body{
+            background-color: #f0ecff;
+        }
+        .card{
+          margin-top:10px;
+        }
+        #add-post{
+          position: fixed;
+          bottom: 5%;
+          right: 7%;
+          font-size: 50px;
+          height: 70px;
+          width: 70px;
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          border-radius: 100px;
+          box-shadow: 0px 10px 10px rgba(0,0,0,.3);
+          z-index: 10;
+        }
+    </style>
+
+    
+    <title>Document</title>
+</head>
+<body >
+
+  <!-- alert  -->
+
+  <div id="success-alert" style="z-index: 1000;position: fixed;left: 0;bottom: 0;" class="fade show"></div>
+
+<!-- start modales  -->
+
+<!-- log in modales  -->
+
+<div class="modal fade" id="logInModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Log In</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">userName:</label>
+            <input type="text" class="form-control" id="userName">
+          </div>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Password:</label>
+            <input type="password" class="form-control" id="password">
+
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeLoginBtn">Close</button>
+        <button type="button" class="btn btn-primary" onclick="loginBtnClicked()">Log In</button>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+
+<!-- register modales  -->
+
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Sign Up New User</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Name:</label>
+            <input type="text" class="form-control" id="Name-register">
+          </div>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">userName:</label>
+            <input type="text" class="form-control" id="userName-register">
+          </div>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Password:</label>
+            <input type="password" class="form-control" id="password-register">
+          </div>
+          <div class="mb-3">
+            <label for="upload-image" class="col-form-label">upload profile image:</label>
+            <input type="file" class="form-control" id="upload-image">
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeRegisterBtn">Close</button>
+        <button type="button" class="btn btn-primary" onclick="registerBtnClicked()">Register</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- post modal  -->
+<div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Create A New Post</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Title</label>
+            <input type="text" class="form-control" id="post-title-input">
+          </div>
+          <div class="mb-3">
+
+            <textarea name=""  id="post-body-input" style="width:100%;height:100px;border-radius:10px;border-color:gray;resize:none">
+
+            </textarea>
+          </div>
+         
+          <div class="mb-3">
+            <label for="post-image-input" class="col-form-label">upload post image:</label>
+            <input type="file" class="form-control" id="post-image-input">
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeCreatePostBtn">Close</button>
+        <button type="button" class="btn btn-primary" onclick="createNewPostClicked()">Create New Post</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end modales  -->
+
+
+<!-- add post button  -->
+<div id="add-post" class="bg-primary" data-bs-toggle="modal" data-bs-target="#postModal">+</div>
+<!-- navbar  -->
+
+    <div class="container">
+        <div class="d-flex justify-content-center">
+            <div class="col-9">
+                <nav class="navbar navbar-expand-lg bg-light shadow rounded">
+                    <a class="navbar-brand " href="#">Tarmeez</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                      <ul class="navbar-nav">
+                        <li class="nav-item">
+                          <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link " href="#">Profile</a>
+                        </li>
+                      </ul>
+
+                      <!-- log in  && Register && logout-->
+                      <div class="d-flex w-100 justify-content-end">
+                          <button id="login-btn"    type="button" class="btn btn-outline-success mx-2" data-bs-toggle="modal" data-bs-target="#logInModal">Log IN</button>
+                          <button id="register-btn" type="button" class="btn btn-outline-success"  data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
+                          <div class="user m-2">
+                            <img src="" alt=""  style="width:30px;height:30px" class="rounded-circle border border-2">
+                            <span class="user-name">Ibrahim Youssif</span>
+                          </div>
+                          <button id="logout-btn"   type="button" class="btn btn-outline-danger">Log Out</button>
+                      </div>
+
+                     
+                    </div>
+                </nav>
+            </div>
+        </div> 
+    </div>
+   
+        <!-- start Main  -->
+        <div class="container mt-5 ">
+            <div class="d-flex justify-content-center">
+                <div class="col-9">
+                    <div id="posts">
+                     
+                    </div>
+                </div>
+             </div>
+        </div>
+        <!-- end Main  -->
+
+    
+      <script src="js/main.js" ></script>
+</body>
+</html>
